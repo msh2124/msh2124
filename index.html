@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Splitter</title>
+</head>
+<body>
+    <h1>Text Splitter</h1>
+    <textarea id="inputText" rows="10" cols="100" placeholder="Paste your text here..."></textarea>
+    <br>
+    <button onclick="splitText()">Split Text</button>
+    <br><br>
+    <div id="output">
+    </div>
+
+    <script>
+        function splitText() {
+            const inputText = document.getElementById("inputText").value;
+            const chunkSize = 15000;
+            const preMessage = "I am going to provide a large volume of text in multiple chunks. Please confirm saying received and ask for the next page.";
+            const interMessage = "This is the next page. Please say received and ask for the next page.";
+            const postMessage = "This is the last page.";
+            let output = document.getElementById("output");
+            output.innerHTML = "";
+
+            let startIndex = 0;
+            let chunkCount = 1;
+
+            while (startIndex < inputText.length) {
+                let chunk = "";
+                let endIndex = startIndex + chunkSize;
+
+                if (chunkCount === 1) {
+                    chunk = preMessage + "\n\n";
+                } else {
+                    chunk = interMessage + "\n\n";
+                }
+
+                endIndex -= chunk.length;
+                if (endIndex >= inputText.length) {
+                    endIndex = inputText.length;
+                    chunk = postMessage + "\n\n" + inputText.slice(startIndex, endIndex);
+                } else {
+                    chunk += inputText.slice(startIndex, endIndex);
+                }
+
+                let chunkElem = document.createElement("div");
+                chunkElem.innerHTML = `<h3>Chunk ${chunkCount}</h3><textarea id="chunkTextArea${chunkCount}" readonly rows="10" cols="100">${chunk}</textarea><button onclick="copyText(${chunkCount})">Copy</button><br><br>`;
+                output.appendChild(chunkElem);
+
+                startIndex = endIndex;
+                chunkCount++;
+            }
+        }
+
+        function copyText(chunkNum) {
+            const textarea = document.getElementById("chunkTextArea" + chunkNum);
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+        }
+    </script>
+</body>
+</html>
