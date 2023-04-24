@@ -19,9 +19,9 @@
         function splitText() {
             const inputText = document.getElementById("inputText").value;
             const chunkSize = 15000;
-            const preMessage = "I am going to provide a large volume of text in multiple chunks. Please confirm saying received. [First Chunk]:";
-            const interMessage = "Please confirm saying received. [Intermediate Chunk]:";
-            const postMessage = "Please confirm saying received. [Last Chunk]:";
+            const preMessage = "I am going to provide a large volume of text in multiple chunks. Please confirm saying received. This is the First Chunk:";
+            const interMessage = "Please confirm saying received. This is the next chunk:";
+            const postMessage = "Please confirm saying received. This is the Last Chunk:";
             let output = document.getElementById("output");
             output.innerHTML = "";
 
