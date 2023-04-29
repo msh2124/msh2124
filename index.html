@@ -22,6 +22,7 @@
             const preMessage = "I am going to provide a large volume of text in multiple chunks. Please confirm saying received and ask for the next one. This is the First Chunk:";
             const interMessage = "Please confirm saying received and ask for the next one. This is the next chunk:";
             const postMessage = "Please confirm saying received. This is the Last Chunk:";
+            const singleMessage = "Please confirm saying received:";
             let output = document.getElementById("output");
             output.innerHTML = "";
 
@@ -32,7 +33,9 @@
                 let chunk = "";
                 let endIndex = startIndex + chunkSize;
 
-                if (chunkCount === 1) {
+                if (inputText.length <= chunkSize) {
+                    chunk = singleMessage + "\n\n";
+                } else if (chunkCount === 1) {
                     chunk = preMessage + "\n\n";
                 } else {
                     chunk = interMessage + "\n\n";
@@ -41,10 +44,12 @@
                 endIndex -= chunk.length;
                 if (endIndex >= inputText.length) {
                     endIndex = inputText.length;
-                    chunk = postMessage + "\n\n" + inputText.slice(startIndex, endIndex);
-                } else {
-                    chunk += inputText.slice(startIndex, endIndex);
+                    if (inputText.length > chunkSize) {
+                        chunk = postMessage + "\n\n";
+                    }
                 }
+
+                chunk += inputText.slice(startIndex, endIndex);
 
                 let chunkElem = document.createElement("div");
                 chunkElem.innerHTML = `<h3>Chunk ${chunkCount}</h3><textarea id="chunkTextArea${chunkCount}" readonly rows="10" cols="100">${chunk}</textarea><button onclick="copyText(${chunkCount})">Copy</button><br><br>`;
